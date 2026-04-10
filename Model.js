@@ -140,7 +140,7 @@ class Planet {
     this.img = img;
     this.angle = 0;
 
-    this.body = Bodies.circle(x, y, r, {
+    this.body = Bodies.circle(x, y, r * 0.8, {
       isStatic: true,
       restitution: 0.6, // rebote
       friction: 0.1,    // fricción 
