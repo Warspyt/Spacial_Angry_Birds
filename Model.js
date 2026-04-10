@@ -131,3 +131,39 @@ class Slingshot {
     }
   }
 }
+
+class Planet {
+  constructor(x, y, r, strength) {
+    this.pos = createVector(x, y);
+    this.r = r;
+    this.strength = strength; // intensidad de gravedad
+  }
+
+  attract(body) {
+    let force = createVector(
+      this.pos.x - body.position.x,
+      this.pos.y - body.position.y
+    );
+
+    let distance = force.mag();
+
+    distance = constrain(distance, 20, 300);
+
+    force.normalize();
+
+    // F = k / d^2
+    let strength = this.strength / (distance * distance);
+
+    force.mult(strength);
+
+    Body.applyForce(body, body.position, force);
+  }
+
+  show() {
+    push();
+    fill(100, 150, 255);
+    noStroke();
+    ellipse(this.pos.x, this.pos.y, this.r * 2);
+    pop();
+  }
+}
