@@ -133,16 +133,27 @@ class Slingshot {
 }
 
 class Planet {
-  constructor(x, y, r, strength) {
+  constructor(x, y, r, strength, img) {
     this.pos = createVector(x, y);
     this.r = r;
-    this.strength = strength; // intensidad de gravedad
+    this.strength = strength;
+    this.img = img;
+    this.angle = 0;
+
+    this.body = Bodies.circle(x, y, r, {
+      isStatic: true,
+      restitution: 0.6, // rebote
+      friction: 0.1,    // fricción 
+      frictionAir: 0.01 // resistencia
+    });
+
+    World.add(world, this.body);
   }
 
   attract(body) {
     let force = createVector(
-      this.pos.x - body.position.x,
-      this.pos.y - body.position.y
+      this.body.position.x - body.position.x,
+      this.body.position.y - body.position.y
     );
 
     let distance = force.mag();
@@ -161,9 +172,19 @@ class Planet {
 
   show() {
     push();
-    fill(100, 150, 255);
-    noStroke();
-    ellipse(this.pos.x, this.pos.y, this.r * 2);
+    translate(this.body.position.x, this.body.position.y);
+    this.angle += 0.01;
+    rotate(this.angle);
+    if (this.img) {
+      imageMode(CENTER);
+      image(this.img, 0, 0, this.r * 2, this.r * 2);
+    } else {
+      fill(100, 150, 255);
+      noStroke();
+      ellipse(0, 0, this.r * 2);
+    }
+  
     pop();
+    
   }
 }

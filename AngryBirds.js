@@ -5,7 +5,8 @@ const { Bodies, Engine, World, Events, Body,
 
 let engine, world, ground,
   boxes=[], bird, pigs = [], slingshot,
-  bgImg, boxImg, birdImages = [], pigImg, planets = [];
+  bgImg, boxImg, birdImages = [], pigImg, 
+  planets = [], planetImg;;
 
 function setup() {
   const canvas = createCanvas(windowWidth, windowHeight);
@@ -26,6 +27,7 @@ function setup() {
   bgSpacialImg = loadImage("spacial_background.jpg");
   boxImg = loadImage("box.png");
   pigImg = loadImage("pig.png");
+  planetImg = loadImage("planet.png");
 
   birdImages = [
     loadImage("red.png"),
@@ -66,22 +68,19 @@ function setupNivel1() {
 }
 
 function setupNivel2() {
-  function setupNivel2() {
   boxes = [];
   pigs = [];
   planets = [];
 
-  // Quitar la gravedad global
   engine.world.gravity.y = 0;
 
   ground = new Ground(width/2, height-10, width, 20);
 
   // Crear planetas
-  planets.push(new Planet(600, 400, 40, 0.05));
-  planets.push(new Planet(1000, 300, 50, 0.08));
-  planets.push(new Planet(1300, 500, 60, 0.1));
+  planets.push(new Planet(600, 400, 150, 0.8, planetImg));
+  planets.push(new Planet(1000, 300, 100, 1, planetImg));
+  planets.push(new Planet(1300, 500, 180, 2, planetImg));
 
-  // Objetos flotando
   for(let i=0; i<5; i++){
     boxes.push(new Box(800 + i*60, 200, 50, 50, boxImg));
   }
@@ -91,7 +90,6 @@ function setupNivel2() {
   bird = new Bird(250, 450, 25, birdImages[1]);
   slingshot = new Slingshot(bird);
 }
-}
 
 
 function draw() {
@@ -99,13 +97,30 @@ function draw() {
 
   if (gameState === "menu") {
     drawMenu();
-  } 
-  else {
+  } else {
     if (gameState === "nivel1") {
       image(bgImg, 0, 0, width, height);
     } 
     else if (gameState === "nivel2") {
       image(bgSpacialImg, 0, 0, width, height);
+      
+      for (let planet of planets) {
+        
+        planet.show();
+
+        for (let box of boxes) {
+          planet.attract(box.body);
+        }
+    
+        for (let pig of pigs) {
+          planet.attract(pig.body);
+        }
+    
+        if (bird) {
+          planet.attract(bird.body);
+        }
+      }
+  
     }
   
     Engine.update(engine);
@@ -118,6 +133,7 @@ function draw() {
     slingshot.show();
     bird.show();
   }
+
 }
 
 function drawMenu() {
