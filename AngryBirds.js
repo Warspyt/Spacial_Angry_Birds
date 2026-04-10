@@ -7,7 +7,7 @@ let engine, world, ground,
   boxes = [], bird, pigs = [], slingshot,
   bgImg, boxImg, birdImages = [], pigImg, 
   planets = [], planetImg, birds = [],
-  currentBirdIndex = 0;
+  currentBirdIndex = 0, bgSpacialImg, bgMenuImg;
 
 function setup() {
   const canvas = createCanvas(windowWidth, windowHeight);
@@ -29,6 +29,7 @@ function setup() {
   boxImg = loadImage("box.png");
   pigImg = loadImage("pig.png");
   planetImg = loadImage("planet.png");
+  //bgMenuImg = = loadImage("menu_background.jpg");
 
   birdImages = [
     loadImage("red.png"),
@@ -171,12 +172,8 @@ function draw() {
 }
 
 function drawMenu() {
-  background(30);
-
-  textAlign(CENTER, CENTER);
-  textSize(50);
-  fill(255);
-  text("ANGRY BIRDS", width/2, height/3);
+  background(33);
+  //image(bgMenuImg, 0, 0, width, height);
 
   // Botón nivel 1
   fill(200);
